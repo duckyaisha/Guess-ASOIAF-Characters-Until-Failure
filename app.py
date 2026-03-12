@@ -11,6 +11,13 @@ import streamlit as st
 import pandas as pd
 import time
 
+def restart_game():
+    st.session_state.correctlist = []
+    st.session_state.madeupguys = []
+    st.session_state.incorrectcounter = 0
+    st.session_state.timer = 30
+    st.rerun()
+
 def clear_input():
     st.session_state.guessbox = ""
 
@@ -35,9 +42,17 @@ timer_display.write(f"Time remaining: {st.session_state.timer} seconds")
 
 if st.session_state.timer <= 0:
     st.error("⏳ TIME'S UP! Game over!")
-    st.write(f"Correct guesses ({len(st.session_state.correctlist)}): {st.session_state.correctlist}")
-    st.write(f"Fake guesses: {st.session_state.madeupguys}")
-    st.stop()  # stop the rest of the app
+
+    st.write(f"Correct guesses ({len(st.session_state.correctlist)}):")
+    st.write(st.session_state.correctlist)
+
+    st.write("Fake guesses:")
+    st.write(st.session_state.madeupguys)
+
+    if st.button("Restart Game"):
+        restart_game()
+
+    st.stop()
 
 with st.form("guess_form", clear_on_submit= True):
     character = st.text_input(
